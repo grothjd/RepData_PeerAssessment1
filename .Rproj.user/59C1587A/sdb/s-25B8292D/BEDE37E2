@@ -1,0 +1,17 @@
+{
+    "contents" : "---\ntitle: \"Reproducible Research: Peer Assessment 1\"\noutput: \n  html_document:\n    keep_md: true\n---\n\n\n## Loading and preprocessing the data\n```{r}\nactivity <- read.csv(\"activity.csv\")\nday_of_week <- weekdays(as.Date(activity$date))\n```\n\n## What is mean total number of steps taken per day?\n```{r}\nnumber_of_steps <- sapply(split(activity$steps, activity$date), sum, na.rm=TRUE)\nhist(number_of_steps)\ntitle(main=\"Histogram of total number of steps taken in a day\", xlab=\"total number of steps\", ylab=\"counts\")\nmean_number_of_steps <- mean(number_of_steps)\nmedian_number_of_steps <- median(number_of_steps)\nprint(\"mean number of steps per day:\")\nprint(mean_number_of_steps)\nprint(\"median number of steps per day:\")\nprint(median_number_of_steps)\n```\n\n## What is the average daily activity pattern?\n```{r}\ny <- sapply(split(activity$steps, activity$interval), mean, na.rm=TRUE)\nx <- names(y)\nplot(x,y, type=\"l\")\ntitle(main=\"Average steps per 5min interval\",xlab=\"Interval number\",  ylab=\"Average number of steps\")\nx[y==max(y)]\n```\n\n\n## Imputing missing values\n```{r}\nNA_index <- is.na(activity$steps)\nnum_NA <- sum(NA_index)\nmedian_steps <- sapply(split(activity$steps, activity$interval), median, na.rm=TRUE)\n\nfor(i in 1:length(activity$steps)){\n  activity_noNA <- NULL\n  if(NA_index[i]){\n    activity_noNA[i] <- unname(median_steps[activity$interval[i]==names(median_steps)])\n  }else{\n    activity_noNA[i] <- activity$steps[i]\n  }\n}\ny <- sapply(split(activity_noNA, activity$date), sum, na.rm=TRUE)\nhist(y)\ntitle(main=\"Histogram of total number of steps taken in a day\", xlab=\"total number of steps\", ylab=\"counts\")\nmean_steps <- mean(y)\nmeadian_steps <- median(y)\nprint(\"mean number of steps per day:\")\nprint(mean_steps)\nprint(\"median number of steps per day:\")\nprint(median_steps)\n```\n\n## Are there differences in activity patterns between weekdays and weekends?\n\nis.weekday <- function(x){\n  y <- NULL\n  for(i in 1:length(x)){\n  if(x[i]==\"Sunday\" || x[i]==\"Saturday\"){\n    y <- c(y, \"weekend\")\n  }else{\n    y <- c(y,\"weekday\")\n  }\n  }\n  as.factor(y)\n}\n\nz <- is.weekday(day_of_week)\nactivity.week <-split(activity, z)\nweekday.activity <- sapply(split(acivity.week$weekday$steps, activity.week$weekday$interval)mean)\n\n",
+    "created" : 1437292376494.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "89710803",
+    "id" : "BEDE37E2",
+    "lastKnownWriteTime" : 1437348036,
+    "path" : "D:/reprod_research/RepData_PeerAssessment1/PA1_template.Rmd",
+    "project_path" : "PA1_template.Rmd",
+    "properties" : {
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "type" : "r_markdown"
+}

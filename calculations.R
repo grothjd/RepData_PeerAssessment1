@@ -1,50 +1,26 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
-
-
-## Loading and preprocessing the data
-```{r}
 activity <- read.csv("activity.csv")
 day_of_week <- weekdays(as.Date(activity$date))
-```
-
-## What is mean total number of steps taken per day?
-```{r}
 number_of_steps <- sapply(split(activity$steps, activity$date), sum, na.rm=TRUE)
 hist(number_of_steps)
-title(main="Histogram of total number of steps taken in a day", xlab="total number of steps", ylab="counts")
 mean_number_of_steps <- mean(number_of_steps)
 median_number_of_steps <- median(number_of_steps)
 print("mean number of steps per day:")
 print(mean_number_of_steps)
 print("median number of steps per day:")
 print(median_number_of_steps)
-```
-
-## What is the average daily activity pattern?
-```{r}
 y <- sapply(split(activity$steps, activity$interval), mean, na.rm=TRUE)
 x <- names(y)
 plot(x,y, type="l")
 title(main="Average steps per 5min interval",xlab="Interval number",  ylab="Average number of steps")
 x[y==max(y)]
-```
 
-
-## Imputing missing values
-```{r}
 NA_index <- is.na(activity$steps)
 num_NA <- sum(NA_index)
 median_steps <- sapply(split(activity$steps, activity$interval), median, na.rm=TRUE)
 
 for(i in 1:length(activity$steps)){
-  activity_noNA <- NULL
   if(NA_index[i]){
-    activity_noNA[i] <- unname(median_steps[activity$interval[i]==names(median_steps)])
+    activity_noNA[i] <- unname(median_steps[activity$interval[i]==names(min_steps)])
   }else{
     activity_noNA[i] <- activity$steps[i]
   }
@@ -58,23 +34,18 @@ print("mean number of steps per day:")
 print(mean_steps)
 print("median number of steps per day:")
 print(median_steps)
-```
-
-## Are there differences in activity patterns between weekdays and weekends?
 
 is.weekday <- function(x){
   y <- NULL
   for(i in 1:length(x)){
   if(x[i]=="Sunday" || x[i]=="Saturday"){
-    y <- c(y, "weekend")
+    y <- c(y, FALSE)
   }else{
-    y <- c(y,"weekday")
+    y <- c(y,TRUE)
   }
   }
-  as.factor(y)
+  y
 }
 
 z <- is.weekday(day_of_week)
-activity.week <-split(activity, z)
-weekday.activity <- sapply(split(acivity.week$weekday$steps, activity.week$weekday$interval)mean)
 

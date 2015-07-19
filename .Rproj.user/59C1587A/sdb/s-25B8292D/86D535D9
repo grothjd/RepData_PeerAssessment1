@@ -1,0 +1,18 @@
+{
+    "contents" : "activity <- read.csv(\"activity.csv\")\nday_of_week <- weekdays(as.Date(activity$date))\nnumber_of_steps <- sapply(split(activity$steps, activity$date), sum, na.rm=TRUE)\nhist(number_of_steps)\nmean_number_of_steps <- mean(number_of_steps)\nmedian_number_of_steps <- median(number_of_steps)\nprint(\"mean number of steps per day:\")\nprint(mean_number_of_steps)\nprint(\"median number of steps per day:\")\nprint(median_number_of_steps)\ny <- sapply(split(activity$steps, activity$interval), mean, na.rm=TRUE)\nx <- names(y)\nplot(x,y, type=\"l\")\ntitle(main=\"Average steps per 5min interval\",xlab=\"Interval number\",  ylab=\"Average number of steps\")\nx[y==max(y)]\n\nNA_index <- is.na(activity$steps)\nnum_NA <- sum(NA_index)\nmedian_steps <- sapply(split(activity$steps, activity$interval), median, na.rm=TRUE)\n\nfor(i in 1:length(activity$steps)){\n  if(NA_index[i]){\n    activity_noNA[i] <- unname(median_steps[activity$interval[i]==names(min_steps)])\n  }else{\n    activity_noNA[i] <- activity$steps[i]\n  }\n}\ny <- sapply(split(activity_noNA, activity$date), sum, na.rm=TRUE)\nhist(y)\ntitle(main=\"Histogram of total number of steps taken in a day\", xlab=\"total number of steps\", ylab=\"counts\")\nmean_steps <- mean(y)\nmeadian_steps <- median(y)\nprint(\"mean number of steps per day:\")\nprint(mean_steps)\nprint(\"median number of steps per day:\")\nprint(median_steps)\n\nis.weekday <- function(x){\n  y <- NULL\n  for(i in 1:length(x)){\n  if(x[i]==\"Sunday\" || x[i]==\"Saturday\"){\n    y <- c(y, FALSE)\n  }else{\n    y <- c(y,TRUE)\n  }\n  }\n  y\n}\n\nz <- is.weekday(day_of_week)\n\n",
+    "created" : 1437298538927.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2427676035",
+    "id" : "86D535D9",
+    "lastKnownWriteTime" : 1437347050,
+    "path" : "D:/reprod_research/RepData_PeerAssessment1/calculations.R",
+    "project_path" : "calculations.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "type" : "r_source"
+}
